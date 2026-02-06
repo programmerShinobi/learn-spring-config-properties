@@ -43,7 +43,7 @@ public class MessageSourceTest {
         @Bean
         public MessageSource messageSource(){
             ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-            messageSource.setBasenames("messages");
+            messageSource.setBasenames("my");
             return messageSource;
         }
 
