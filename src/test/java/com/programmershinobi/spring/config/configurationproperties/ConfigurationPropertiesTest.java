@@ -21,6 +21,14 @@ public class ConfigurationPropertiesTest {
         Assertions.assertEquals(false, properties.isProductionMode());
     }
 
+    @Test
+    void testDatabaseProperties() {
+        Assertions.assertEquals("faqih", properties.getDatabase().getUsername());
+        Assertions.assertEquals("secret", properties.getDatabase().getPassword());
+        Assertions.assertEquals("learn", properties.getDatabase().getDatabase());
+        Assertions.assertEquals("jdbc:example", properties.getDatabase().getUrl());
+    }
+
     @SpringBootApplication
     @EnableConfigurationProperties({
             ApplicationProperties.class
