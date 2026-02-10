@@ -22,7 +22,7 @@ public class ValueTest {
     void testValue() {
         Assertions.assertEquals("Belajar Spring Boot", properties.getName());
         Assertions.assertEquals(1, properties.getVersion());
-        Assertions.assertTrue(properties.isProductionMode());
+        Assertions.assertFalse(properties.isProductionMode());
     }
 
     @Test
