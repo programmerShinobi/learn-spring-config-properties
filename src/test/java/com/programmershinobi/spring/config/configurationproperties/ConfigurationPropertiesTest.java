@@ -1,30 +1,46 @@
 package com.programmershinobi.spring.config.configurationproperties;
 
+import com.programmershinobi.spring.config.converter.StringToDateConverter;
 import com.programmershinobi.spring.config.properties.ApplicationProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.ConversionService;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Date;
 
-
-@SpringBootTest(classes = ConfigurationPropertiesTest.TestApplicatiom.class)
+@SpringBootTest(classes = ConfigurationPropertiesTest.TestApplication.class)
 public class ConfigurationPropertiesTest {
 
     @Autowired
     private ApplicationProperties properties;
 
+    @Autowired
+    private ConversionService conversionService;
+
+    @Test
+    void testConversionService() {
+        Assertions.assertTrue(conversionService.canConvert(String.class, Duration.class));
+        Assertions.assertTrue(conversionService.canConvert(String.class, Date.class));
+
+        Duration result = conversionService.convert("10s", Duration.class);
+        Assertions.assertEquals(Duration.ofSeconds(10), result);
+    }
+
     @Test
     void testConfigurationProperties() {
         Assertions.assertEquals("Belajar Spring Boot", properties.getName());
         Assertions.assertEquals(1, properties.getVersion());
-        Assertions.assertEquals(false, properties.isProductionMode());
+        Assertions.assertFalse(properties.isProductionMode());
     }
 
     @Test
@@ -73,7 +89,15 @@ public class ConfigurationPropertiesTest {
     @EnableConfigurationProperties({
             ApplicationProperties.class
     })
-    public static class TestApplicatiom {
+    @Import(StringToDateConverter.class)
+    public static class TestApplication {
+
+        @Bean
+        public ConversionService conversionService(StringToDateConverter stringToDateConverter) {
+            ApplicationConversionService conversionService = new ApplicationConversionService();
+            conversionService.addConverter(stringToDateConverter);
+            return conversionService;
+        }
 
     }
 

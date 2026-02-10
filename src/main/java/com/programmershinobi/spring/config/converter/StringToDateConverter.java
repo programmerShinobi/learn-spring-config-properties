@@ -8,9 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
-public class StringToDataConverter implements Converter<String, Date> {
+public class StringToDateConverter implements Converter<String, Date> {
 
-    private SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/mm/yyyy");
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     @SneakyThrows
